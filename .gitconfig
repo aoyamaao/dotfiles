@@ -4,3 +4,10 @@
 [core]
 	editor = vim
 	sshCommand = ssh -o UseKeychain=yes -i ~/.ssh/id_ed25519
+[diff]
+	tool = vimdiff
+[merge]
+	tool = vimdiff
+	conflictstyle = diff3
+[difftool]
+	prompt = false
