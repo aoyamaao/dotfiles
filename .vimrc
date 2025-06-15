@@ -100,7 +100,7 @@ set undofile
 " Undo履歴の保存場所を定義
 let s:undodir = expand('~/.vim/undodir')
 if !isdirectory(s:undodir)
-    call mkdir(s:undodir, 'p')
+  call mkdir(s:undodir, 'p')
 endif
 set undodir=~/.vim/undodir
 " スワップファイルの保存場所を一箇所にまとめる
@@ -183,8 +183,8 @@ nmap <leader>rn <Plug>(lsp-rename)
 nnoremap <Leader>f <Plug>(lsp-document-format)
 " 保存時の自動フォーマット
 augroup LspFormatting
-    autocmd!
-    autocmd BufWritePre *.py LspDocumentFormatSync
+  autocmd!
+  autocmd BufWritePre *.py LspDocumentFormatSync
 augroup END
 
 " --- Auto Completion Mappings ---
@@ -224,17 +224,51 @@ if has('mac')
 endif
 
 augroup CustomAutoCmds
-    autocmd!
+  autocmd!
 
-    " 全てのファイルタイプで、oやOによるコメントの自動挿入を無効化
-    autocmd FileType * setlocal formatoptions-=o
+  " VimScript用のインデント・タブ設定
+  autocmd FileType vim setlocal shiftwidth=2 tabstop=2
 
-    " Netrwでqを押した時にバッファを閉じる
-    autocmd FileType netrw nnoremap <silent> <buffer> q :bdelete<CR>
+  " 全てのファイルタイプで、oやOによるコメントの自動挿入を無効化
+  autocmd FileType * setlocal formatoptions-=o
 
-    " macOSでVimのフォーカス時に英数入力に自動で切り替える
-    if has('mac')
-        autocmd FocusGained * call s:OnFocusGained()
-        autocmd FocusLost * call s:OnFocusLost()
-    endif
+  " Netrwでqを押したときにバッファを閉じる
+  autocmd FileType netrw nnoremap <silent> <buffer> q :bdelete<CR>
+
+  if &term =~# '^tmux'
+    " フォーカスレポートを有効化するエスケープシーケンス
+    let &t_fe = "\<Esc>[?1004h"
+    " フォーカスレポートを無効化するエスケープシーケンス
+    let &t_fd = "\<Esc>[?1004l"
+    " VimがFocusGained/FocusLostとして認識すべきエスケープシーケンスを定義する
+    execute "set <FocusGained>=\<Esc>[I"
+    execute "set <FocusLost>=\<Esc>[O"
+  endif
+
+  " Vimのフォーカス時に英数入力に自動で切り替える
+  autocmd FocusGained,WinEnter * call s:OnFocusGained()
+  autocmd FocusLost,WinLeave * call s:OnFocusLost()
 augroup END
+
+"============================================================================
+" FOR DEBUGGING: Input Sniffer
+"============================================================================
+" This function enters an infinite loop to capture and display every keystroke
+" Vim receives. This is for advanced debugging of terminal/tmux interactions.
+function! s:DebugInput()
+  echom "--- Input Debug Mode Start ---"
+  echom "Click on other panes/apps now. Press Ctrl-C to exit this mode."
+  while 1
+    " Wait for and get a single character (or byte from a sequence)
+    let char_code = getchar()
+
+    " Convert the character code to a readable string
+    let char_str = (type(char_code) == type(0)) ? nr2char(char_code) : char_code
+
+    " Display all information about the received input
+    echom printf("Received -> String: '%s' | Decimal: %s | Hex: 0x%x", char_str, char_code, char_code)
+  endwhile
+endfunction
+
+" Press <Leader>d to start the input debugger
+nnoremap <silent> <leader>d :call <SID>DebugInput()<CR>
