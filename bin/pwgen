@@ -1,0 +1,51 @@
+#!/bin/zsh
+
+#==============================================================================
+# Secure Password Generator
+#==============================================================================
+
+set -e
+
+# --- Configuration ---
+DEFAULT_LENGTH=16
+LENGTH=$DEFAULT_LENGTH
+ALL_CHARS='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{};:,./<>?'
+
+# --- Help message ---
+show_help() {
+  cat << EOF
+Usage: $(basename "$0") [-l LENGTH] [-h]
+Generate a random, secure password.
+
+  -l, --length LENGTH   Specify the password length (default: ${DEFAULT_LENGTH}).
+  -h, --help            Show this help message.
+EOF
+}
+
+# --- コマンドラインオプションの解析 ---
+# -l, --length オプションが与えられた場合のみ桁数を変更
+if [ "$1" = "-l" ] || [ "$1" = "--length" ]; then
+  if [[ "$2" =~ ^[0-9]+$ ]] && [ "$2" -gt 0 ]; then
+    LENGTH="$2"
+  else
+    echo "Error: Length must be a positive number." >&2
+    exit 1
+  fi
+elif [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+  show_help
+  exit 0
+elif [ $# -gt 0 ]; then
+  echo "Error: Unknown option '$1'" >&2
+  show_help
+  exit 1
+fi
+
+# --- パスワード生成のコアロジック ---
+#
+# LC_ALL=C: trコマンドが不正なバイトシーケンスエラーを起こすのを防ぐ
+# tr -dc "$ALL_CHARS": /dev/urandomの出力から許可された文字以外を全て削除する
+# head -c "$LENGTH": 先頭から指定した長さの文字数だけを切り出す
+LC_ALL=C tr -dc "$ALL_CHARS" < /dev/urandom | head -c "$LENGTH"
+
+# 最後に改行を出力してプロンプトの表示が崩れないようにする
+echo ""
