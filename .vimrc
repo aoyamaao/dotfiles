@@ -24,6 +24,9 @@ Plug 'tpope/vim-vinegar'
 Plug 'easymotion/vim-easymotion'
 Plug 'mbbill/undotree'
 
+" --- Editing Helpers ---
+Plug 'jiangmiao/auto-pairs'
+
 " --- Git Integration ---
 Plug 'tpope/vim-fugitive'
 
@@ -159,15 +162,6 @@ nnoremap <silent> <C-l> :TNavigateRight<CR>
 " ノーマルモードのまま空行を挿入
 nnoremap <silent> <Leader>o o<Esc>
 nnoremap <silent> <Leader>O O<Esc>
-
-" --- Auto-pairing ---
-" 対応する閉じ文字を自動挿入する
-inoremap ' ''<Left>
-" inoremap " ""<Left>
-inoremap ( ()<Left>
-inoremap [ []<Left>
-inoremap { {}<Left>
-inoremap ` ``<Left>
 
 " --- LSP Mappings ---
 " 定義元へジャンプ
