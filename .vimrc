@@ -191,6 +191,9 @@ inoremap <expr> <CR>    pumvisible() ? "\<C-y>" : "\<CR>"
 inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
+" fzfのパス補完を呼び出す
+inoremap <silent><expr> <C-x><C-f> fzf#vim#complete#path('find . -type f')
+
 "==============================================================================
 " 6. Appearance & Colors
 "==============================================================================
