@@ -41,7 +41,7 @@ Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
 
 " --- UI & Theme ---
-Plug 'lifepillar/vim-solarized8'
+Plug 'bluz71/vim-nightfly-colors', { 'as': 'nightfly' }
 
 " --- Utilities ---
 Plug 'christoomey/vim-tmux-navigator'
@@ -190,8 +190,13 @@ inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 "==============================================================================
 " 6. Appearance & Colors
 "==============================================================================
-colorscheme solarized8
-set background=dark
+" TrueColor有効化 (termguicolors機能を持ってコンパイルされている場合のみ)
+if has('termguicolors')
+  set termguicolors
+endif
+
+" カラーテーマの設定
+colorscheme nightfly
 
 " 不可視文字を表示する
 set list
