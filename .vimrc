@@ -27,6 +27,10 @@ Plug 'mbbill/undotree'
 " --- Editing Helpers ---
 Plug 'jiangmiao/auto-pairs'
 
+" --- Status line plugin ---
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+
 " --- Git Integration ---
 Plug 'tpope/vim-fugitive'
 
@@ -197,6 +201,14 @@ endif
 
 " カラーテーマの設定
 colorscheme nightfly
+
+" --- Airline Settings ---
+" Nerd Fontsの特殊文字を使うことをAirlineに伝える
+let g:airline_powerline_fonts = 1
+" タブ一覧表示機能を有効化（ウィンドウ上部にもステータスラインが表示される）
+let g:airline#extensions#tabline#enabled = 1
+" カラーテーマを設定
+let g:airline_theme = 'nightfly'
 
 " 不可視文字を表示する
 set list
