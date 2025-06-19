@@ -1,0 +1,65 @@
+# ==============================================================================
+# Zsh Configuration
+# ==============================================================================
+#
+# ------------------------------------------------------------------------------
+# 1. Powerlevel10k Instant Prompt (Initialization)
+# ------------------------------------------------------------------------------
+# プロンプトの高速表示機能。 ユーザーの入力を求める設定はこれより上に記述する
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# ------------------------------------------------------------------------------
+# 2. Environment Variables & PATH
+# ------------------------------------------------------------------------------
+# --- PATH Settings ---
+# コマンド検索パスを設定。Homebrewのパスを優先的に検索するように先頭に追加する
+export PATH="$(brew --prefix)/bin:$PATH"
+export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+export PATH="$HOME/dotfiles/bin:$PATH"
+export PATH="$HOME/.rbenv/bin:$PATH"
+export PATH="$HOME/.rbenv/shims:$PATH"
+
+# --- pyenv Settings ---
+# pyenv (Pythonバージョン管理) の設定
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+
+# ------------------------------------------------------------------------------
+# 3. Shell Options & History
+# ------------------------------------------------------------------------------
+# --- History Settings ---
+HISTFILE=$HOME/.zsh_history
+# メモリ上に保持する履歴の件数
+HISTSIZE=1000
+# ディスクに永続保存する履歴の件数
+SAVEHIST=1000
+# 直前のコマンドと重複するコマンドは記録しない
+setopt hist_ignore_dups
+# 履歴削除時にまず重複から削除する
+setopt hist_expire_dups_first
+# 全てのターミナルで履歴をリアルタイムに共有する
+setopt share_history
+# 履歴の実行前に一度プロンプトに表示して確認を求める
+setopt hist_verify
+
+# ------------------------------------------------------------------------------
+# 4. Plugin & Theme Loading
+# ------------------------------------------------------------------------------
+# --- fzf ---
+# fzfのキーバインドと補完を有効化
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# --- Powerlevel10k ---
+# テーマを読み込む
+source ~/powerlevel10k/powerlevel10k.zsh-theme
+# 設定ファイルを読み込む
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# --- Zsh Plugins ---
+# zsh-autosuggestions (コマンド履歴からの入力補完)
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+# zsh-syntax-highlighting (コマンドラインのリアルタイム構文ハイライト)
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
