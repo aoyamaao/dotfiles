@@ -59,6 +59,26 @@ local plugins = {
       }
     end,
   },
+
+  -- UndoTree
+  {
+    "mbbill/undotree",
+    cmd = "UndotreeToggle",
+    keys = {
+      { "<leader>u", "<cmd>UndotreeToggle<cr>", desc = "Toggle UndoTree" },
+    },
+  },
+
+  -- Key mapping list
+  {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    config = function()
+      vim.o.timeout = true
+      vim.o.timeoutlen = 300
+      --require("which-key").setup({})
+    end,
+  },
 }
 
 require("lazy").setup(plugins, {})
