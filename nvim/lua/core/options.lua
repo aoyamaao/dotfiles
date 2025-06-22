@@ -47,6 +47,21 @@ if vim.fn.isdirectory(undo_dir) == 0 then
   vim.fn.mkdir(undo_dir, 'p')
 end
 
+-------------------------------------------------------------------------------
+-- Swap File Settings
+-------------------------------------------------------------------------------
+-- スワップファイルを有効にする
+vim.opt.swapfile = true
+
+-- スワップファイルを保存するディレクトリのパスを定義
+local swap_dir = data_dir .. '/swap'
+vim.opt.directory = swap_dir .. '//'
+
+-- スワップディレクトリがなければ作成する
+if vim.fn.isdirectory(swap_dir) == 0 then
+  vim.fn.mkdir(swap_dir, 'p')
+end
+
 --==============================================================================
 -- Visualize Invisible Characters
 --==============================================================================
