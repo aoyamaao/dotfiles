@@ -1,11 +1,14 @@
+--=================================================================
 -- autocmds.lua
-
+--=================================================================
 local api = vim.api
 
 -- augroupで自動コマンドをグループ化して再読み込み時に重複しないようにする
 local custom_autocmds = api.nvim_create_augroup('CustomAutoCmds', { clear = true })
 
--- 全てのファイルタイプでoやOによるコメントの自動挿入を無効化
+--=================================================================
+-- oコマンドのコメント自動挿入を無効化
+--=================================================================
 api.nvim_create_autocmd('FileType', {
   pattern = '*',
   group = custom_autocmds,
@@ -27,7 +30,9 @@ api.nvim_create_autocmd('FileType', {
   end,
 })
 
--- 保存時に自動でフォーマットを実行する
+--=================================================================
+-- 自動フォーマット
+--=================================================================
 local format_on_save_group = api.nvim_create_augroup('FormatOnSave', { clear = true })
 api.nvim_create_autocmd('BufWritePre', {
   group = format_on_save_group,
@@ -55,3 +60,39 @@ api.nvim_create_autocmd('BufWritePre', {
     end
   end,
 })
+
+--=================================================================
+-- IME自動切り替え
+--=================================================================
+if vim.fn.has('mac') == 1 then
+  vim.g.original_ime = ''
+
+  local function on_focus_gained()
+    local current_ime = vim.fn.trim(vim.fn.system('im-select'))
+    if current_ime ~= 'com.apple.keylayout.ABC' then
+      vim.g.original_ime = current_ime
+    else
+      vim.g.original_ime = ''
+    end
+    vim.fn.system('im-select com.apple.keylayout.ABC')
+  end
+
+  local function on_focus_lost()
+    if vim.g.original_ime ~= '' and vim.g.original_ime ~= 'com.apple.keylayout.ABC' then
+      vim.fn.system('im-select ' .. vim.g.original_ime)
+      vim.g.original_ime = ''
+    end
+  end
+
+  local ime_augroup = vim.api.nvim_create_augroup('ImeAutoSwitch', { clear = true })
+  vim.api.nvim_create_autocmd({ 'FocusGained', 'WinEnter' }, {
+    group = ime_augroup,
+    pattern = '*',
+    callback = on_focus_gained,
+  })
+  vim.api.nvim_create_autocmd({ 'FocusLost', 'WinLeave' }, {
+    group = ime_augroup,
+    pattern = '*',
+    callback = on_focus_lost,
+  })
+end
