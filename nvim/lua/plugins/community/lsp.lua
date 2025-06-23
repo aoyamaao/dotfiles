@@ -1,7 +1,7 @@
 return {
-  -- =================================================================
+  --=================================================================
   -- 1. Mason
-  -- =================================================================
+  --=================================================================
   {
     'williamboman/mason.nvim',
     config = function()
@@ -9,76 +9,22 @@ return {
     end,
   },
 
-  -- =================================================================
-  -- 2. Mason LSP-Config
-  -- =================================================================
+  --=================================================================
+  -- 2. Mason-LSPConfig
+  --=================================================================
   {
     'williamboman/mason-lspconfig.nvim',
     dependencies = { 'williamboman/mason.nvim' },
     config = function()
-      -- インストール済みのLSPサーバーを管理し、セットアップの準備をする
       require('mason-lspconfig').setup({
         ensure_installed = { 'lua_ls', 'pyright', 'clangd' },
       })
     end,
   },
 
-  -- =================================================================
-  -- 3. nvim-lspconfig
-  -- =================================================================
-  {
-    'neovim/nvim-lspconfig',
-    dependencies = { 'williamboman/mason-lspconfig.nvim' },
-    config = function()
-      local on_attach = function(client, bufnr)
-        local nmap = function(keys, func, desc)
-          if desc then
-            desc = 'LSP: ' .. desc
-          end
-          vim.keymap.set(
-            'n',
-            keys,
-            func,
-            { buffer = bufnr, noremap = true, silent = true, desc = desc }
-          )
-        end
-        nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
-        nmap('gr', vim.lsp.buf.references, '[G]oto [R]eferences')
-        nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
-        nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-        nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
-        nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
-        nmap('gl', vim.diagnostic.open_float, 'Line Diagnostics')
-      end
-      local capabilities = require('cmp_nvim_lsp').default_capabilities()
-
-      require('mason-lspconfig').setup({
-        handlers = {
-          function(server_name)
-            require('lspconfig')[server_name].setup({
-              on_attach = on_attach,
-              capabilities = capabilities,
-            })
-          end,
-          ['lua_ls'] = function()
-            require('lspconfig').lua_ls.setup({
-              on_attach = on_attach,
-              capabilities = capabilities,
-              settings = {
-                Lua = {
-                  diagnostics = { globals = { 'vim' } },
-                },
-              },
-            })
-          end,
-        },
-      })
-    end,
-  },
-
-  -- =================================================================
-  -- 4. nvim-cmp (コード補完UI)
-  -- =================================================================
+  --=================================================================
+  -- 3. nvim-cmp
+  --=================================================================
   {
     'hrsh7th/nvim-cmp',
     event = { 'InsertEnter', 'CmdlineEnter' },
@@ -92,7 +38,6 @@ return {
     config = function()
       local cmp = require('cmp')
       local luasnip = require('luasnip')
-
       cmp.setup({
         snippet = {
           expand = function(args)
@@ -128,6 +73,70 @@ return {
             end
           end, { 'i', 's' }),
         }),
+      })
+    end,
+  },
+
+  --=================================================================
+  -- 4. nvim-lspconfig
+  --=================================================================
+  {
+    'neovim/nvim-lspconfig',
+    dependencies = { 'williamboman/mason-lspconfig.nvim' },
+    config = function()
+      local on_attach = function(_, bufnr)
+        local nmap = function(keys, func, desc)
+          if desc then
+            desc = 'LSP: ' .. desc
+          end
+          vim.keymap.set(
+            'n',
+            keys,
+            func,
+            { buffer = bufnr, noremap = true, silent = true, desc = desc }
+          )
+        end
+        nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
+        nmap('gr', vim.lsp.buf.references, '[G]oto [R]eferences')
+        nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
+        nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
+        nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
+        nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
+        nmap('gl', vim.diagnostic.open_float, 'Line Diagnostics')
+        nmap('[d', vim.diagnostic.goto_prev, 'Previous Diagnostic')
+        nmap(']d', vim.diagnostic.goto_next, 'Next Diagnostic')
+      end
+
+      local capabilities = require('cmp_nvim_lsp').default_capabilities()
+      local lspconfig = require('lspconfig')
+
+      require('mason-lspconfig').setup({
+        handlers = {
+          function(server_name)
+            lspconfig[server_name].setup({
+              on_attach = on_attach,
+              capabilities = capabilities,
+            })
+          end,
+
+          ['lua_ls'] = function()
+            lspconfig.lua_ls.setup({
+              on_attach = on_attach,
+              capabilities = capabilities,
+              settings = {
+                Lua = {
+                  workspace = {
+                    library = vim.api.nvim_get_runtime_file('', true),
+                    checkThirdParty = false,
+                  },
+                  diagnostics = {
+                    globals = { 'vim' },
+                  },
+                },
+              },
+            })
+          end,
+        },
       })
     end,
   },
