@@ -30,6 +30,7 @@ map('i', 'jj', '<Esc>')
 -- 保存、閉じる、保存して閉じる
 map('n', '<Leader>w', '<Cmd>w<CR>', { desc = 'Write (save) the file' })
 map('n', '<Leader>q', '<Cmd>q<CR>', { desc = 'Quit the current window' })
+map('n', '<Leader>qq', '<Cmd>q!<CR>', { desc = 'Quit without saving' })
 map('n', '<Leader>wq', '<Cmd>wq<CR>', { desc = 'Write and quit' })
 
 -- Escキー2回で検索ハイライトを消去
