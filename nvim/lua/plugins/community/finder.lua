@@ -29,5 +29,6 @@ return {
     map('n', '<leader>lg', '<cmd>Telescope live_grep<cr>', { desc = '[L]ookup by [G]rep' })
     map('n', '<leader>lb', '<cmd>Telescope buffers<cr>', { desc = '[L]ookup [B]uffers' })
     map('n', '<leader>lh', '<cmd>Telescope help_tags<cr>', { desc = '[L]ookup [H]elp' })
+    map('n', '<leader>ld', '<cmd>Telescope diagnostics<cr>', { desc = '[L]ookup [D]iagnostics' })
   end,
 }
