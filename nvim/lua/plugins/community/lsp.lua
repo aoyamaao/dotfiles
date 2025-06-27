@@ -1,17 +1,8 @@
 return {
-  --=================================================================
-  -- 1. Mason
-  --=================================================================
   {
     'williamboman/mason.nvim',
-    config = function()
-      require('mason').setup()
-    end,
+    config = true,
   },
-
-  --=================================================================
-  -- 2. Mason-LSPConfig
-  --=================================================================
   {
     'williamboman/mason-lspconfig.nvim',
     dependencies = { 'williamboman/mason.nvim' },
@@ -21,10 +12,36 @@ return {
       })
     end,
   },
+  {
+    'neovim/nvim-lspconfig',
+    dependencies = { 'williamboman/mason-lspconfig.nvim' },
+    config = function()
+      local lsp_core = require('core.lsp')
+      local lspconfig = require('lspconfig')
 
-  --=================================================================
-  -- 3. nvim-cmp
-  --=================================================================
+      local servers = { 'lua_ls', 'pyright', 'clangd' }
+      for _, server_name in ipairs(servers) do
+        local opts = {
+          on_attach = lsp_core.on_attach,
+          capabilities = lsp_core.capabilities,
+        }
+        if server_name == 'lua_ls' then
+          opts.settings = {
+            Lua = {
+              workspace = {
+                library = vim.api.nvim_get_runtime_file('', true),
+                checkThirdParty = false,
+              },
+              diagnostics = {
+                globals = { 'vim' },
+              },
+            },
+          }
+        end
+        lspconfig[server_name].setup(opts)
+      end
+    end,
+  },
   {
     'hrsh7th/nvim-cmp',
     event = { 'InsertEnter', 'CmdlineEnter' },
@@ -73,70 +90,6 @@ return {
             end
           end, { 'i', 's' }),
         }),
-      })
-    end,
-  },
-
-  --=================================================================
-  -- 4. nvim-lspconfig
-  --=================================================================
-  {
-    'neovim/nvim-lspconfig',
-    dependencies = { 'williamboman/mason-lspconfig.nvim' },
-    config = function()
-      local on_attach = function(_, bufnr)
-        local nmap = function(keys, func, desc)
-          if desc then
-            desc = 'LSP: ' .. desc
-          end
-          vim.keymap.set(
-            'n',
-            keys,
-            func,
-            { buffer = bufnr, noremap = true, silent = true, desc = desc }
-          )
-        end
-        nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
-        nmap('gr', vim.lsp.buf.references, '[G]oto [R]eferences')
-        nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
-        nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-        nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
-        nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
-        nmap('gl', vim.diagnostic.open_float, 'Line Diagnostics')
-        nmap('[d', vim.diagnostic.goto_prev, 'Previous Diagnostic')
-        nmap(']d', vim.diagnostic.goto_next, 'Next Diagnostic')
-      end
-
-      local capabilities = require('cmp_nvim_lsp').default_capabilities()
-      local lspconfig = require('lspconfig')
-
-      require('mason-lspconfig').setup({
-        handlers = {
-          function(server_name)
-            lspconfig[server_name].setup({
-              on_attach = on_attach,
-              capabilities = capabilities,
-            })
-          end,
-
-          ['lua_ls'] = function()
-            lspconfig.lua_ls.setup({
-              on_attach = on_attach,
-              capabilities = capabilities,
-              settings = {
-                Lua = {
-                  workspace = {
-                    library = vim.api.nvim_get_runtime_file('', true),
-                    checkThirdParty = false,
-                  },
-                  diagnostics = {
-                    globals = { 'vim' },
-                  },
-                },
-              },
-            })
-          end,
-        },
       })
     end,
   },
