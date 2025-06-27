@@ -15,6 +15,7 @@ ln -sfv "${DOT_DIR}/git/config" "${HOME}/.gitconfig"
 ln -sfv "${DOT_DIR}/tmux/tmux.conf" "${HOME}/.tmux.conf"
 ln -sfv "${DOT_DIR}/vim/vimrc" "${HOME}/.vimrc"
 ln -sfv "${DOT_DIR}/zsh/zshrc" "${HOME}/.zshrc"
+ln -sfv "${DOT_DIR}/c++/clang-format.yaml" "${HOME}/.clang-format"
 # .config配下
 mkdir -p "${HOME}/.config"
 rm -rf "${HOME}/.config/nvim" # ディレクトリなので一旦削除する
