@@ -3,5 +3,5 @@ BasedOnStyle: Google
 # 短い関数を1行にまとめる機能を無効化する
 AllowShortFunctionsOnASingleLine: None
 
-IndentWidth: 4
+IndentWidth: 2
 ColumnLimit: 100
