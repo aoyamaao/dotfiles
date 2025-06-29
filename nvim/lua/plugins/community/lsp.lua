@@ -5,12 +5,6 @@ return {
   },
   {
     'williamboman/mason-lspconfig.nvim',
-    dependencies = { 'williamboman/mason.nvim' },
-    config = function()
-      require('mason-lspconfig').setup({
-        ensure_installed = { 'lua_ls', 'pyright', 'clangd' },
-      })
-    end,
   },
   {
     'neovim/nvim-lspconfig',
@@ -18,8 +12,8 @@ return {
     config = function()
       local lsp_core = require('core.lsp')
       local lspconfig = require('lspconfig')
-
       local servers = { 'lua_ls', 'pyright', 'clangd' }
+
       for _, server_name in ipairs(servers) do
         local opts = {
           on_attach = lsp_core.on_attach,

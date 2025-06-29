@@ -20,7 +20,7 @@ api.nvim_create_autocmd('FileType', {
 
 -- LuaとVimScriptはインデント幅を2にする
 api.nvim_create_autocmd('FileType', {
-  pattern = { 'lua', 'vim' },
+  pattern = { 'lua', 'vim', 'cpp' },
   group = custom_autocmds,
   desc = 'Set indent width to 2 for lua and vim files',
   callback = function()
@@ -96,3 +96,27 @@ if vim.fn.has('mac') == 1 then
     callback = on_focus_lost,
   })
 end
+
+-- =================================================================
+-- AtCoderプロジェクト用のclangd設定を自動生成する
+-- =================================================================
+local atcoder_project_augroup = vim.api.nvim_create_augroup('AtcoderProject', { clear = true })
+vim.api.nvim_create_autocmd('FileType', {
+  group = atcoder_project_augroup,
+  pattern = 'cpp',
+  desc = 'Auto-generate compile_flags.txt for AtCoder projects',
+  callback = function()
+    -- 現在のパスがatcoderプロジェクト内か確認
+    local current_path = vim.fn.getcwd()
+    local atcoder_root = vim.fn.expand('~/atcoder')
+
+    if string.find(current_path, atcoder_root, 1, true) then
+      -- compile_flags.txtのパスを定義
+      local flags_file = atcoder_root .. '/compile_flags.txt'
+      -- 記述する内容を定義 (ホームディレクトリを動的に展開し、絶対パスを生成)
+      local flags_content = '-std=c++20\n-I' .. atcoder_root
+      -- ファイルに書き込み (vim.splitで改行をテーブルに変換)
+      vim.fn.writefile(vim.split(flags_content, '\n'), flags_file)
+    end
+  end,
+})
