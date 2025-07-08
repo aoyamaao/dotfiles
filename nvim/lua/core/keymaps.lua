@@ -33,13 +33,15 @@ map('n', '<Leader>q', '<Cmd>q<CR>', { desc = 'Quit the current window' })
 map('n', '<Leader>qq', '<Cmd>q!<CR>', { desc = 'Quit without saving' })
 map('n', '<Leader>wq', '<Cmd>wq<CR>', { desc = 'Write and quit' })
 
--- Escキー2回で検索ハイライトを消去
+-- Escキー4回で検索ハイライトを消去
 map('n', '<Esc><Esc>', '<Cmd>nohlsearch<CR>', { desc = 'Clear search highlight' })
 
 -- --- Editing Helpers ---
 -- ノーマルモードのまま空行を挿入
 map('n', '<Leader>o', 'o<Esc>')
 map('n', '<Leader>O', 'O<Esc>')
+-- 全選択
+map('n', '<Leader>a', 'ggVG', { desc = 'Select All' })
 
 -- --- Buffer & Window Navigation ---
 -- バッファ移動

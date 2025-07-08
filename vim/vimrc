@@ -166,6 +166,8 @@ nnoremap <silent> <C-l> :TNavigateRight<CR>
 " ノーマルモードのまま空行を挿入
 nnoremap <silent> <Leader>o o<Esc>
 nnoremap <silent> <Leader>O O<Esc>
+" 全選択
+nnoremap <Leader>a ggVG
 
 " --- LSP Mappings ---
 " 定義元へジャンプ
