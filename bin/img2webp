@@ -1,0 +1,31 @@
+#!/bin/zsh
+
+SAVE_DIR=${1:-$HOME/Downloads}
+mkdir -p "$SAVE_DIR"
+
+if [ $# -gt 1 ]; then
+    shift
+    FILES=("$@")
+else
+    setopt cshnullglob
+    setopt nocaseglob
+    FILES=(*.jpg *.jpeg *.png)
+    unsetopt nocaseglob
+    setopt cshnullglob
+fi
+
+TOTAL=${#FILES[@]}
+COUNT=0
+
+for FILE in "${FILES[@]}"; do
+    [ -e "$FILE" ] || continue
+    COUNT=$((COUNT + 1))
+
+    FILENAME=$(basename "${FILE%.*}")
+
+    echo "[$COUNT/$TOTAL] Converting: $FILE -> $SAVE_DIR/$FILENAME.webp"
+
+    cwebp -quiet -q 75 -m 6 -resize 1200 0 "$FILE" -o "$SAVE_DIR/$FILENAME.webp"
+done
+
+echo "Done."
