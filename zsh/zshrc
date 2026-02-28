@@ -64,3 +64,10 @@ source ~/powerlevel10k/powerlevel10k.zsh-theme
 source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 # zsh-syntax-highlighting (コマンドラインのリアルタイム構文ハイライト)
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# ------------------------------------------------------------------------------
+# 5. Aliases
+# ------------------------------------------------------------------------------
+# --- Image Processing ---
+# WebP一括変換: 横幅1200px / 画質75 / Effort 6 / 拡張子を小文字の.webpに統一
+alias webp-gen='find . -type f \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" \) | xargs -I {} sh -c '\''cwebp -q 75 -m 6 -resize 1200 0 "{}" -o "${1%.*}.webp"'\'' -- {}'
