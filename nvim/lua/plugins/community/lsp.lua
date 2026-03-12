@@ -11,28 +11,29 @@ return {
     dependencies = { 'williamboman/mason-lspconfig.nvim' },
     config = function()
       local lsp_core = require('core.lsp')
-      local lspconfig = require('lspconfig')
       local servers = { 'lua_ls', 'pyright', 'clangd' }
 
-      for _, server_name in ipairs(servers) do
-        local opts = {
-          on_attach = lsp_core.on_attach,
-          capabilities = lsp_core.capabilities,
-        }
-        if server_name == 'lua_ls' then
-          opts.settings = {
-            Lua = {
-              workspace = {
-                library = vim.api.nvim_get_runtime_file('', true),
-                checkThirdParty = false,
-              },
-              diagnostics = {
-                globals = { 'vim' },
-              },
+      vim.lsp.config('*', {
+        on_attach = lsp_core.on_attach,
+        capabilities = lsp_core.capabilities,
+      })
+
+      vim.lsp.config('lua_ls', {
+        settings = {
+          Lua = {
+            workspace = {
+              library = vim.api.nvim_get_runtime_file('', true),
+              checkThirdParty = false,
             },
-          }
-        end
-        lspconfig[server_name].setup(opts)
+            diagnostics = {
+              globals = { 'vim' },
+            },
+          },
+        },
+      })
+
+      for _, server_name in ipairs(servers) do
+        vim.lsp.enable(server_name)
       end
     end,
   },
