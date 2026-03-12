@@ -1,5 +1,15 @@
 return {
   {
+    'folke/lazydev.nvim',
+    ft = 'lua',
+    opts = {
+      library = {
+        { path = 'luvit-meta/library', words = { 'vim%.uv' } },
+      },
+    },
+  },
+  { 'Bilal2453/luvit-meta', lazy = true },
+  {
     'williamboman/mason.nvim',
     config = true,
   },
@@ -16,20 +26,6 @@ return {
       vim.lsp.config('*', {
         on_attach = lsp_core.on_attach,
         capabilities = lsp_core.capabilities,
-      })
-
-      vim.lsp.config('lua_ls', {
-        settings = {
-          Lua = {
-            workspace = {
-              library = vim.api.nvim_get_runtime_file('', true),
-              checkThirdParty = false,
-            },
-            diagnostics = {
-              globals = { 'vim' },
-            },
-          },
-        },
       })
 
       for _, server_name in ipairs(servers) do
