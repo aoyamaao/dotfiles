@@ -2,7 +2,7 @@
 	name = aoyamaao
 	email = 117564484+aoyamaao@users.noreply.github.com
 [core]
-	editor = vim
+	editor = nvim
 	sshCommand = ssh -o UseKeychain=yes -i ~/.ssh/id_ed25519
 [diff]
 	tool = vimdiff
