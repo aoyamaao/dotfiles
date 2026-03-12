@@ -7,6 +7,7 @@ dynamic_padding = true
 decorations = "Buttonless"
 opacity = 0.8
 blur = true
+dimensions = { columns = 100, lines = 50 }
 
 [font]
 normal = { family = "JetBrainsMono Nerd Font", style = "Regular" }
