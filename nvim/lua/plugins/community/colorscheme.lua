@@ -9,5 +9,6 @@ return {
       'MatchParen',
       { bg = '#444444', fg = '#ff966c', bold = true, underline = true }
     )
+    vim.api.nvim_set_hl(0, 'RenderMarkdownCode', { bg = '#000032' })
   end,
 }
