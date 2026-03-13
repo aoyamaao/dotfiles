@@ -8,8 +8,8 @@ local opt = vim.opt
 
 -- 行番号を表示する
 opt.number = true
--- 相対行番号を表示する (<N>j, <N>kでの移動が楽になる)
-opt.relativenumber = true
+-- 相対行番号を表示する
+opt.relativenumber = false
 
 -- カーソルがある行をハイライトする
 opt.cursorline = true
