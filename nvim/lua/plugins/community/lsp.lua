@@ -21,7 +21,7 @@ return {
     dependencies = { 'williamboman/mason-lspconfig.nvim' },
     config = function()
       local lsp_core = require('core.lsp')
-      local servers = { 'lua_ls', 'pyright', 'clangd' }
+      local servers = { 'lua_ls', 'pyright', 'clangd', 'astro', 'ts_ls' }
 
       vim.lsp.config('*', {
         on_attach = lsp_core.on_attach,

@@ -3,9 +3,27 @@ return {
     'nvim-treesitter/nvim-treesitter',
     opts = function(_, opts)
       if type(opts.ensure_installed) == 'table' then
-        vim.list_extend(opts.ensure_installed, { 'markdown', 'markdown_inline' })
+        vim.list_extend(opts.ensure_installed, {
+          'markdown',
+          'markdown_inline',
+          'astro',
+          'html',
+          'css',
+          'javascript',
+          'typescript',
+          'tsx',
+        })
       else
-        opts.ensure_installed = { 'markdown', 'markdown_inline' }
+        opts.ensure_installed = {
+          'markdown',
+          'markdown_inline',
+          'astro',
+          'html',
+          'css',
+          'javascript',
+          'typescript',
+          'tsx',
+        }
       end
     end,
   },
