@@ -169,6 +169,12 @@ nnoremap <silent> <Leader>O m`O<Esc>``
 " 全選択
 nnoremap <Leader>a ggVG
 
+" --- Markdown ---
+" 文字列をMarkdownリンク化
+nnoremap <Leader>k "zciW[<C-r>z](<C-r>+)<Esc>
+" 選択範囲をMarkdownリンク化
+vnoremap <Leader>k "zc[<C-r>z](<C-r>+)<Esc>
+
 " --- LSP Mappings ---
 " 定義元へジャンプ
 nmap <leader>gd <Plug>(lsp-definition)

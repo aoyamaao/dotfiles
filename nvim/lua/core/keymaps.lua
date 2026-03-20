@@ -48,6 +48,10 @@ map('n', '<Leader>a', 'ggVG', { desc = 'Select All' })
 map('n', '<S-l>', '<Cmd>bnext<CR>', { desc = 'Next buffer' })
 map('n', '<S-h>', '<Cmd>bprevious<CR>', { desc = 'Previous buffer' })
 
+-- --- Markdown ---
+map('n', '<Leader>k', '"zciW[<C-r>z](<C-r>+)<Esc>', { desc = '単語をMarkdownリンク化' })
+map('v', '<Leader>k', '"zc[<C-r>z](<C-r>+)<Esc>', { desc = '選択範囲をMarkdownリンク化' })
+
 -- ターミナルモードでウィンドウ移動
 vim.cmd([[
   tnoremap <C-j> <C-w><C-j>
