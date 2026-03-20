@@ -42,6 +42,9 @@ map('n', '<Leader>o', 'm`o<Esc>``')
 map('n', '<Leader>O', 'm`O<Esc>``')
 -- 全選択
 map('n', '<Leader>a', 'ggVG', { desc = 'Select All' })
+-- 行移動
+map('n', '<A-k>', '<Cmd>m .-2<CR>==', { desc = '現在の行を上に移動' })
+map('n', '<A-j>', '<Cmd>m .+1<CR>==', { desc = '現在の行を下に移動' })
 
 -- --- Buffer & Window Navigation ---
 -- バッファ移動

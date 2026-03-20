@@ -8,6 +8,7 @@ decorations = "Buttonless"
 opacity = 0.8
 blur = true
 dimensions = { columns = 100, lines = 50 }
+option_as_alt = "Both"
 
 [font]
 normal = { family = "JetBrainsMono Nerd Font", style = "Regular" }

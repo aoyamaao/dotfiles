@@ -168,6 +168,11 @@ nnoremap <silent> <Leader>o m`o<Esc>``
 nnoremap <silent> <Leader>O m`O<Esc>``
 " 全選択
 nnoremap <Leader>a ggVG
+" 行の入れ替え
+execute "set <M-j>=\ej"
+execute "set <M-k>=\ek"
+nnoremap <M-j> <Cmd>m .+1<CR>==
+nnoremap <M-k> <Cmd>m .-2<CR>==
 
 " --- Markdown ---
 " 文字列をMarkdownリンク化
