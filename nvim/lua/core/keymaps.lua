@@ -37,9 +37,9 @@ map('n', '<Leader>wq', '<Cmd>wq<CR>', { desc = 'Write and quit' })
 map('n', '<Esc><Esc>', '<Cmd>nohlsearch<CR>', { desc = 'Clear search highlight' })
 
 -- --- Editing Helpers ---
--- ノーマルモードのまま空行を挿入
-map('n', '<Leader>o', 'o<Esc>')
-map('n', '<Leader>O', 'O<Esc>')
+-- ノーマルモードのまま空行を挿入し、カーソルは移動させない
+map('n', '<Leader>o', 'm`o<Esc>``')
+map('n', '<Leader>O', 'm`O<Esc>``')
 -- 全選択
 map('n', '<Leader>a', 'ggVG', { desc = 'Select All' })
 

@@ -163,9 +163,9 @@ nnoremap <silent> <C-k> :TNavigateUp<CR>
 nnoremap <silent> <C-l> :TNavigateRight<CR>
 
 " --- Editing Helpers ---
-" ノーマルモードのまま空行を挿入
-nnoremap <silent> <Leader>o o<Esc>
-nnoremap <silent> <Leader>O O<Esc>
+" ノーマルモードのまま空行を挿入し、カーソルは移動させない
+nnoremap <silent> <Leader>o m`o<Esc>``
+nnoremap <silent> <Leader>O m`O<Esc>``
 " 全選択
 nnoremap <Leader>a ggVG
 
