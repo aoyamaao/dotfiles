@@ -149,6 +149,8 @@ nnoremap <silent> <Esc><Esc> :noh<CR>
 " バッファ移動
 nnoremap <S-l> :bnext<CR>
 nnoremap <S-h> :bprevious<CR>
+" バッファ削除
+nnoremap <Leader>bd <Cmd>bp <bar> bd #<CR>
 " ターミナルモードのウィンドウ移動
 tnoremap <C-j> <C-w><C-j>
 tnoremap <C-k> <C-w><C-k>

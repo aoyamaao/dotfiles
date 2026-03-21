@@ -50,6 +50,7 @@ map('n', '<A-j>', '<Cmd>m .+1<CR>==', { desc = '現在の行を下に移動' })
 -- バッファ移動
 map('n', '<S-l>', '<Cmd>bnext<CR>', { desc = 'Next buffer' })
 map('n', '<S-h>', '<Cmd>bprevious<CR>', { desc = 'Previous buffer' })
+map('n', '<Leader>bd', '<Cmd>bp | bd #<CR>', { desc = 'バッファを閉じる' })
 
 -- --- Markdown ---
 map('n', '<Leader>k', '"zciW[<C-r>z](<C-r>+)<Esc>', { desc = '単語をMarkdownリンク化' })
