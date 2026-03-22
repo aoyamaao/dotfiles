@@ -9,7 +9,12 @@ local opt = vim.opt
 -- 行番号を表示する
 opt.number = true
 -- 相対行番号を表示する
-opt.relativenumber = false
+opt.relativenumber = true
+-- ガターの描画フォーマットを再構築（絶対行と相対行を並べる）
+-- %s           : サイン列（Gitの追加・削除マークやエラーアイコン等）
+-- %4{v:lnum}   : 絶対行数を4桁分のスペースで右寄せ描画
+-- %3{v:relnum} : 相対行数を3桁分のスペースで描画
+opt.statuscolumn = '%s %4{v:lnum}%3{v:relnum} '
 
 -- カーソルがある行をハイライトする
 opt.cursorline = true
