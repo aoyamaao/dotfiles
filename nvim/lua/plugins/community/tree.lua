@@ -26,7 +26,7 @@ return {
       },
       window = {
         position = 'left',
-        width = 30,
+        width = 40,
         mappings = {
           ['b'] = function(_)
             require('neo-tree.command').execute({ source = 'buffers', toggle = true })
