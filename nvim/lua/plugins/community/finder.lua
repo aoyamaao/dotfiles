@@ -19,15 +19,23 @@ return {
           },
         },
       },
+      pickers = {
+        buffers = {
+          mappings = {
+            i = {
+              ['<C-x>'] = actions.delete_buffer,
+            },
+          },
+        },
+      },
     })
-
     telescope.load_extension('fzf')
 
     local map = vim.keymap.set
-    map('n', '<leader>lf', '<cmd>Telescope find_files<cr>', { desc = '[L]ookup [F]iles' })
-    map('n', '<leader>lg', '<cmd>Telescope live_grep<cr>', { desc = '[L]ookup by [G]rep' })
-    map('n', '<leader>lb', '<cmd>Telescope buffers<cr>', { desc = '[L]ookup [B]uffers' })
-    map('n', '<leader>lh', '<cmd>Telescope help_tags<cr>', { desc = '[L]ookup [H]elp' })
-    map('n', '<leader>ld', '<cmd>Telescope diagnostics<cr>', { desc = '[L]ookup [D]iagnostics' })
+    map('n', '<leader>ff', '<cmd>Telescope find_files<cr>', { desc = '[F]ind [F]iles' })
+    map('n', '<leader>fg', '<cmd>Telescope live_grep<cr>', { desc = '[F]ind by [G]rep' })
+    map('n', '<leader>fb', '<cmd>Telescope buffers<cr>', { desc = '[F]ind [B]uffers' })
+    map('n', '<leader>fh', '<cmd>Telescope help_tags<cr>', { desc = '[F]ind [H]elp' })
+    map('n', '<leader>fd', '<cmd>Telescope diagnostics<cr>', { desc = '[F]ind [D]iagnostics' })
   end,
 }
