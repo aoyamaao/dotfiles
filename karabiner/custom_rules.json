@@ -1,0 +1,207 @@
+{
+  "title": "Custom Keybindings",
+  "rules": [
+    {
+      "description": "Spaceキー長押しでFnレイヤー化（単押しで通常のSpace）",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "spacebar",
+            "modifiers": { "optional": ["any"] }
+          },
+          "to": [
+            {
+              "set_variable": {
+                "name": "space_fn",
+                "value": 1
+              }
+            }
+          ],
+          "to_after_key_up": [
+            {
+              "set_variable": {
+                "name": "space_fn",
+                "value": 0
+              }
+            }
+          ],
+          "to_if_alone": [
+            {
+              "key_code": "spacebar"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "Spaceレイヤー: hjkl を矢印キーに変換",
+      "manipulators": [
+        {
+          "type": "basic",
+          "conditions": [
+            { "type": "variable_if", "name": "space_fn", "value": 1 }
+          ],
+          "from": { "key_code": "h", "modifiers": { "optional": ["any"] } },
+          "to": [ { "key_code": "left_arrow" } ]
+        },
+        {
+          "type": "basic",
+          "conditions": [
+            { "type": "variable_if", "name": "space_fn", "value": 1 }
+          ],
+          "from": { "key_code": "j", "modifiers": { "optional": ["any"] } },
+          "to": [ { "key_code": "down_arrow" } ]
+        },
+        {
+          "type": "basic",
+          "conditions": [
+            { "type": "variable_if", "name": "space_fn", "value": 1 }
+          ],
+          "from": { "key_code": "k", "modifiers": { "optional": ["any"] } },
+          "to": [ { "key_code": "up_arrow" } ]
+        },
+        {
+          "type": "basic",
+          "conditions": [
+            { "type": "variable_if", "name": "space_fn", "value": 1 }
+          ],
+          "from": { "key_code": "l", "modifiers": { "optional": ["any"] } },
+          "to": [ { "key_code": "right_arrow" } ]
+        }
+      ]
+    },
+    {
+      "description": "左Cmd単押しで「英数」、右Cmd単押しで「かな」に入力切り替え",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "left_command",
+            "modifiers": { "optional": ["any"] }
+          },
+          "to": [ { "key_code": "left_command" } ],
+          "to_if_alone": [
+            {
+              "select_input_source": {
+                "language": "^en$"
+              }
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "right_command",
+            "modifiers": { "optional": ["any"] }
+          },
+          "to": [ { "key_code": "right_command" } ],
+          "to_if_alone": [
+            {
+              "select_input_source": {
+                "language": "^ja$"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "左Cmd単押しで入力切替（トグル）",
+      "manipulators": [
+        {
+          "type": "basic",
+          "conditions": [
+            {
+              "type": "input_source_if",
+              "input_sources": [
+                {
+                  "language": "^ja$"
+                }
+              ]
+            }
+          ],
+          "from": {
+            "key_code": "left_command",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_command"
+            }
+          ],
+          "to_if_alone": [
+            {
+              "select_input_source": {
+                "language": "^en$"
+              }
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "conditions": [
+            {
+              "type": "input_source_unless",
+              "input_sources": [
+                {
+                  "language": "^ja$"
+                }
+              ]
+            }
+          ],
+          "from": {
+            "key_code": "left_command",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_command"
+            }
+          ],
+          "to_if_alone": [
+            {
+              "select_input_source": {
+                "language": "^ja$"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "左Ctrl単押しを「Esc」として機能させる",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "left_control",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_control"
+            }
+          ],
+          "to_if_alone": [
+            {
+              "key_code": "escape"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
