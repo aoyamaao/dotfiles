@@ -65,35 +65,35 @@ api.nvim_create_autocmd('BufWritePre', {
 -- IME自動切り替え
 --=================================================================
 if vim.fn.has('mac') == 1 then
-  vim.g.original_ime = ''
-
-  local function on_focus_gained()
-    local current_ime = vim.fn.trim(vim.fn.system('im-select'))
-    if current_ime ~= 'com.apple.keylayout.ABC' then
-      vim.g.original_ime = current_ime
-    else
-      vim.g.original_ime = ''
-    end
-    vim.fn.system('im-select com.apple.keylayout.ABC')
-  end
-
-  local function on_focus_lost()
-    if vim.g.original_ime ~= '' and vim.g.original_ime ~= 'com.apple.keylayout.ABC' then
-      vim.fn.system('im-select ' .. vim.g.original_ime)
-      vim.g.original_ime = ''
-    end
-  end
-
   local ime_augroup = vim.api.nvim_create_augroup('ImeAutoSwitch', { clear = true })
-  vim.api.nvim_create_autocmd({ 'FocusGained', 'WinEnter' }, {
+
+  -- Inserモード時のIME状態を記憶
+  local saved_ime = 'com.apple.keylayout.ABC'
+
+  -- Insertモードを抜ける時
+  vim.api.nvim_create_autocmd('InsertLeave', {
     group = ime_augroup,
-    pattern = '*',
-    callback = on_focus_gained,
+    callback = function()
+      -- 現在のIME状態を保存する
+      saved_ime = vim.fn.trim(vim.fn.system('im-select'))
+
+      -- 日本語等の場合、強制的に英語に戻す
+      if saved_ime ~= 'com.apple.keylayout.ABC' then
+        -- os.executeの末尾に '&' をつけてバックグラウンド実行
+        os.execute('im-select com.apple.keylayout.ABC > /dev/null 2>&1 &')
+      end
+    end,
   })
-  vim.api.nvim_create_autocmd({ 'FocusLost', 'WinLeave' }, {
+
+  -- Insertモードに入る時
+  vim.api.nvim_create_autocmd('InsertEnter', {
     group = ime_augroup,
-    pattern = '*',
-    callback = on_focus_lost,
+    callback = function()
+      -- 前回Insertモードだった時のIME状態に復元する
+      if saved_ime ~= 'com.apple.keylayout.ABC' then
+        os.execute('im-select ' .. saved_ime .. ' > /dev/null 2>&1 &')
+      end
+    end,
   })
 end
 

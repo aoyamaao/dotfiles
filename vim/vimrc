@@ -238,16 +238,22 @@ set listchars=tab:▸\ ,trail:-,nbsp:¬
 " 7. Automatic Commands
 "==============================================================================
 if has('mac')
-  let g:original_ime = ''
+  " Insert時のIME状態を記憶する
+  let s:saved_ime = 'com.apple.keylayout.ABC'
 
-  function! s:OnFocusGained()
-    let g:original_ime = trim(system('im-select'))
-    silent! call system('im-select com.apple.keylayout.ABC')
+  function! s:ImeInsertLeave()
+    " 現在のIME状態を保存する
+    let s:saved_ime = trim(system('im-select'))
+    if s:saved_ime !=# 'com.apple.keylayout.ABC'
+      " 非同期で英語に戻す
+      call system('im-select com.apple.keylayout.ABC > /dev/null 2>&1 &')
+    endif
   endfunction
 
-  function! s:OnFocusLost()
-    if g:original_ime != '' && g:original_ime != 'com.apple.keylayout.ABC'
-      silent! call system('im-select ' . g:original_ime)
+  function! s:ImeInsertEnter()
+    " 前回Insertだった時のIME状態に復元する
+    if s:saved_ime !=# 'com.apple.keylayout.ABC'
+      call system('im-select ' . s:saved_ime . ' > /dev/null 2>&1 &')
     endif
   endfunction
 endif
@@ -267,16 +273,15 @@ augroup CustomAutoCmds
   if &term =~# '^tmux'
     " フォーカスレポートを有効化するエスケープシーケンス
     let &t_fe = "\<Esc>[?1004h"
-    " フォーカスレポートを無効化するエスケープシーケンス
     let &t_fd = "\<Esc>[?1004l"
-    " VimがFocusGained/FocusLostとして認識すべきエスケープシーケンスを定義する
     execute "set <FocusGained>=\<Esc>[I"
     execute "set <FocusLost>=\<Esc>[O"
   endif
 
-  " Vimのフォーカス時に英数入力に自動で切り替える
-  autocmd FocusGained,WinEnter * call s:OnFocusGained()
-  autocmd FocusLost,WinLeave * call s:OnFocusLost()
+  if has('mac')
+    autocmd InsertLeave * call s:ImeInsertLeave()
+    autocmd InsertEnter * call s:ImeInsertEnter()
+  endif
 augroup END
 
 "============================================================================
