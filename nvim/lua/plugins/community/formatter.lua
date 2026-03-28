@@ -7,11 +7,20 @@ return {
         lua = { 'stylua' },
         python = { 'black' },
         cpp = { 'clang-format' },
+        javascript = { 'prettier' },
+        typescript = { 'prettier' },
+        javascriptreact = { 'prettier' },
+        typescriptreact = { 'prettier' },
+        css = { 'prettier' },
+        html = { 'prettier' },
+        json = { 'prettier' },
+        markdown = { 'prettier' },
+        astro = { 'prettier' },
       },
     })
-    vim.keymap.set({ 'n', 'v' }, '<leader>f', function()
+
+    vim.keymap.set({ 'n', 'v' }, '<leader>cf', function()
       require('conform').format({ async = true, lsp_fallback = true })
-      vim.notify('Manual format complete!', vim.log.levels.INFO, { title = 'Conform' })
-    end, { desc = 'Format buffer' })
+    end, { desc = '[C]ode [F]ormat' })
   end,
 }
