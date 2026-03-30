@@ -1,10 +1,20 @@
 #!/bin/zsh
 
-SAVE_DIR=${1:-$HOME/Downloads}
+SAVE_DIR="$HOME/Downloads"
+WIDTH=""
+
+# オプション (-w: 幅指定, -d: 保存先ディレクトリ指定)
+while getopts "w:d:" opt; do
+  case $opt in
+    w) WIDTH="$OPTARG" ;;
+    d) SAVE_DIR="$OPTARG" ;;
+  esac
+done
+shift $((OPTIND - 1))
+
 mkdir -p "$SAVE_DIR"
 
-if [ $# -gt 1 ]; then
-    shift
+if [ $# -gt 0 ]; then
     FILES=("$@")
 else
     setopt cshnullglob
@@ -20,12 +30,15 @@ COUNT=0
 for FILE in "${FILES[@]}"; do
     [ -e "$FILE" ] || continue
     COUNT=$((COUNT + 1))
-
     FILENAME=$(basename "${FILE%.*}")
 
-    echo "[$COUNT/$TOTAL] Converting: $FILE -> $SAVE_DIR/$FILENAME.webp"
-
-    cwebp -quiet -q 75 -m 6 -resize 1200 0 "$FILE" -o "$SAVE_DIR/$FILENAME.webp"
+    if [ -n "$WIDTH" ]; then
+        echo "[$COUNT/$TOTAL] Converting (Resize to ${WIDTH}px): $FILE -> $SAVE_DIR/$FILENAME.webp"
+        cwebp -quiet -q 75 -m 6 -resize "$WIDTH" 0 "$FILE" -o "$SAVE_DIR/$FILENAME.webp"
+    else
+        echo "[$COUNT/$TOTAL] Converting (Original Size): $FILE -> $SAVE_DIR/$FILENAME.webp"
+        cwebp -quiet -q 75 -m 6 "$FILE" -o "$SAVE_DIR/$FILENAME.webp"
+    fi
 done
 
 echo "Done."
