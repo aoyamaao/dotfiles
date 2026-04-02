@@ -71,3 +71,9 @@ source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # --- Image Processing ---
 # WebP一括変換: 横幅1200px / 画質75 / Effort 6 / 拡張子を小文字の.webpに統一
 alias webp-gen='find . -type f \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" \) | xargs -I {} sh -c '\''cwebp -q 75 -m 6 -resize 1200 0 "{}" -o "${1%.*}.webp"'\'' -- {}'
+
+
+# ------------------------------------------------------------------------------
+# Homebrew
+# ------------------------------------------------------------------------------
+export HOMEBREW_NO_AUTO_UPDATE=1
