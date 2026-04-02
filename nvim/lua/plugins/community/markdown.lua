@@ -33,4 +33,15 @@ return {
     ft = { 'markdown' },
     opts = {},
   },
+  {
+    'dhruvasagar/vim-table-mode',
+    ft = 'markdown',
+    config = function()
+      -- Markdown標準のテーブル構文にする
+      vim.g.table_mode_corner = '|'
+
+      -- <Leader>| でテーブルモードのON/OFFを切り替え
+      vim.keymap.set('n', '<leader>|', '<cmd>TableModeToggle<CR>', { desc = 'Toggle Table Mode' })
+    end,
+  },
 }
