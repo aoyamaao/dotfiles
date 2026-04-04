@@ -12,6 +12,7 @@ return {
           'javascript',
           'typescript',
           'tsx',
+          'mdx',
         })
       else
         opts.ensure_installed = {
@@ -23,6 +24,7 @@ return {
           'javascript',
           'typescript',
           'tsx',
+          'mdx',
         }
       end
     end,
@@ -30,12 +32,12 @@ return {
   {
     'MeanderingProgrammer/render-markdown.nvim',
     dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' },
-    ft = { 'markdown' },
+    ft = { 'markdown', 'mdx' },
     opts = {},
   },
   {
     'dhruvasagar/vim-table-mode',
-    ft = 'markdown',
+    ft = { 'markdown', 'mdx' },
     config = function()
       -- Markdown標準のテーブル構文にする
       vim.g.table_mode_corner = '|'
