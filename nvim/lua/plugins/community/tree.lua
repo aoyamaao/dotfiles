@@ -41,6 +41,13 @@ return {
       },
       -- Gitのステータス（変更、無視ファイルなど）を表示する機能を有効化
       filesystem = {
+        -- 現在開いているファイルに自動追従する
+        follow_current_file = {
+          enabled = true, -- 追従を有効化
+          leave_dirs_open = false, -- 別フォルダのファイルを開いたときに以前のフォルダを自動で閉じる
+        },
+        -- 裏側のファイル変更を即座にツリーに反映させる
+        use_libuv_file_watcher = true,
         filtered_items = {
           visible = true,
           hide_dotfiles = false,
