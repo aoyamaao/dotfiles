@@ -67,7 +67,7 @@ local function insert_frontmatter(template_type)
       'description: ""',
       'publishDate: ' .. date_str,
       'updatedDate: ' .. date_str,
-      'image: "/images/article/default.webp"',
+      'image: "/images/articles/default.webp"',
       'draft: false',
       'categories:',
     })
