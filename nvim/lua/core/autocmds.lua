@@ -67,34 +67,22 @@ api.nvim_create_autocmd('BufWritePre', {
 if vim.fn.has('mac') == 1 then
   local ime_augroup = vim.api.nvim_create_augroup('ImeAutoSwitch', { clear = true })
 
-  -- Inserモード時のIME状態を記憶
-  local saved_ime = 'com.apple.keylayout.ABC'
+  local function force_abc()
+    os.execute('im-select com.apple.keylayout.ABC > /dev/null 2>&1 &')
+  end
 
-  -- Insertモードを抜ける時
-  vim.api.nvim_create_autocmd('InsertLeave', {
+  -- InsertLeave: Esc, Ctrl+[, jj 等でノーマルモードに戻ったら英数
+  -- FocusGained: ブラウザ等からNeovimに戻ったら英数
+  vim.api.nvim_create_autocmd({ 'InsertLeave', 'FocusGained' }, {
     group = ime_augroup,
-    callback = function()
-      -- 現在のIME状態を保存する
-      saved_ime = vim.fn.trim(vim.fn.system('im-select'))
-
-      -- 日本語等の場合、強制的に英語に戻す
-      if saved_ime ~= 'com.apple.keylayout.ABC' then
-        -- os.executeの末尾に '&' をつけてバックグラウンド実行
-        os.execute('im-select com.apple.keylayout.ABC > /dev/null 2>&1 &')
-      end
-    end,
+    callback = force_abc,
   })
 
-  -- Insertモードに入る時
-  vim.api.nvim_create_autocmd('InsertEnter', {
-    group = ime_augroup,
-    callback = function()
-      -- 前回Insertモードだった時のIME状態に復元する
-      if saved_ime ~= 'com.apple.keylayout.ABC' then
-        os.execute('im-select ' .. saved_ime .. ' > /dev/null 2>&1 &')
-      end
-    end,
-  })
+  -- Ctrl+o: 一時ノーマルモードに入るときも英数
+  vim.keymap.set('i', '<C-o>', function()
+    force_abc()
+    return '<C-o>'
+  end, { expr = true, silent = true })
 end
 
 -- =================================================================
