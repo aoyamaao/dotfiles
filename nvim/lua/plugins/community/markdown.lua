@@ -33,7 +33,28 @@ return {
     'MeanderingProgrammer/render-markdown.nvim',
     dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' },
     ft = { 'markdown', 'mdx' },
-    opts = {},
+    opts = {
+      file_types = { 'markdown', 'mdx' },
+    },
+    init = function()
+      vim.api.nvim_create_autocmd('FileType', {
+        pattern = { 'markdown', 'mdx' },
+        callback = function(event)
+          vim.keymap.set(
+            'n',
+            '<Leader>k',
+            '"zciW[<C-r>z](<C-r>+)<Esc>',
+            { buffer = event.buf, desc = '単語をMarkdownリンク化' }
+          )
+          vim.keymap.set(
+            'v',
+            '<Leader>k',
+            '"zc[<C-r>z](<C-r>+)<Esc>',
+            { buffer = event.buf, desc = '選択範囲をMarkdownリンク化' }
+          )
+        end,
+      })
+    end,
   },
   {
     'dhruvasagar/vim-table-mode',

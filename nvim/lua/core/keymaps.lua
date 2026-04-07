@@ -85,10 +85,6 @@ map('n', '<leader>bc', function()
   end
 end, { desc = '現在のBuffer以外をすべて閉じる' })
 
--- --- Markdown ---
-map('n', '<Leader>k', '"zciW[<C-r>z](<C-r>+)<Esc>', { desc = '単語をMarkdownリンク化' })
-map('v', '<Leader>k', '"zc[<C-r>z](<C-r>+)<Esc>', { desc = '選択範囲をMarkdownリンク化' })
-
 -- ターミナルモードでウィンドウ移動
 vim.cmd([[
   tnoremap <C-j> <C-w><C-j>
