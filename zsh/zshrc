@@ -21,6 +21,7 @@ export PATH="$HOME/dotfiles/bin:$PATH"
 export PATH="$HOME/atcoder/bin:$PATH"
 export PATH="$HOME/.rbenv/bin:$PATH"
 export PATH="$HOME/.rbenv/shims:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 
 # --- pyenv Settings ---
 # pyenv (Pythonバージョン管理) の設定
