@@ -7,7 +7,7 @@ local api = vim.api
 local custom_autocmds = api.nvim_create_augroup('CustomAutoCmds', { clear = true })
 
 --=================================================================
--- oコマンドのコメント自動挿入を無効化
+-- コメントの自動挿入設定
 --=================================================================
 api.nvim_create_autocmd('FileType', {
   pattern = '*',
@@ -15,6 +15,26 @@ api.nvim_create_autocmd('FileType', {
   desc = 'Disable auto-commenting on new line',
   callback = function()
     vim.opt_local.formatoptions:remove('o')
+  end,
+})
+
+--=================================================================
+-- Markdown/Astro用：リスト自動継続
+--=================================================================
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'markdown', 'mdx', 'markdown.mdx', 'astro' },
+  group = custom_autocmds,
+  desc = 'Enable list continuation for Markdown',
+  callback = function()
+    --  動作ルールの指定
+    -- r: Enterを押した時
+    -- o: o や O を押した時
+    -- j: 連結時に不要な記号を消す
+    vim.opt_local.formatoptions:append('roj')
+
+    -- どの記号を継続対象にするか
+    -- b: 記号の後に半角スペースが必要という意味
+    vim.opt_local.comments = 'b:-,b:*'
   end,
 })
 
