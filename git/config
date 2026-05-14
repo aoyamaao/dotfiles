@@ -1,13 +1,30 @@
 [user]
 	name = aoyamaao
 	email = 117564484+aoyamaao@users.noreply.github.com
+    useConfigOnly = true
+
+[init]
+    defaultBranch = main
+
 [core]
 	editor = nvim
 	sshCommand = ssh -o UseKeychain=yes -i ~/.ssh/id_ed25519
+
+[commit]
+    verbose = true
+
+[push]
+    autoSetupRemote = true
+
+[fetch]
+    prune = true
+
 [diff]
 	tool = vimdiff
+
 [merge]
 	tool = vimdiff
 	conflictstyle = diff3
+
 [difftool]
 	prompt = false
