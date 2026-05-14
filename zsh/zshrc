@@ -79,6 +79,7 @@ alias webp-gen='find . -type f \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.
 # ------------------------------------------------------------------------------
 export EDITOR=nvim
 export VISUAL=nvim
+bindkey -e
 
 # ------------------------------------------------------------------------------
 # Homebrew
