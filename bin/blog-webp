@@ -1,0 +1,150 @@
+#!/bin/zsh
+
+# --- 設定 ---
+SAVE_ROOT="webp"
+QUALITY=75
+WIDTH=""
+FORCE=false
+
+# オプション解析 (-w: 幅指定, -f: 強制再変換)
+while getopts "w:f" opt; do
+  case $opt in
+    w) WIDTH="$OPTARG" ;;
+    f) FORCE=true ;;
+  esac
+done
+shift $((OPTIND - 1))
+
+# パスから情報を取得
+PRODUCT_DIR=$(pwd)
+PRODUCT_NAME=$(basename "$PRODUCT_DIR")
+BRAND_NAME=$(basename "$(dirname "$PRODUCT_DIR")")
+
+# フェイルセーフ 1: 親ディレクトリ名の検証
+if [[ "$BRAND_NAME" == "blog" || "$BRAND_NAME" == "Pictures" ]]; then
+    echo "\e[31mError: 実行場所が不適切です。製品階層で実行してください。\e[0m"
+    exit 1
+fi
+
+# フェイルセーフ 2: 対象フォルダの存在検証
+MATCHING_DIRS=( [0-9][0-9]_*(N/) )
+if [ ${#MATCHING_DIRS[@]} -eq 0 ]; then
+    echo "\e[31mError: 01_xxx のような部位フォルダが見つかりません。\e[0m"
+    exit 1
+fi
+
+echo "\e[34mTarget: $BRAND_NAME / $PRODUCT_NAME\e[0m"
+
+# 拡張グロブの有効化
+setopt extended_glob
+
+# --- 進捗バー関数 ---
+show_progress() {
+    local label=$1 current=$2 total=$3
+    local percent=$(( current * 100 / total ))
+    local bar=""
+    for ((i=0; i<percent/5; i++)); do bar+="#"; done
+    printf "\r  %s: [%-20s] %d%% (%d/%d)" "$label" "$bar" "$percent" "$current" "$total"
+}
+
+# --- Altリストの初期化 ---
+mkdir -p "$SAVE_ROOT"
+ALT_LIST_FILE="$SAVE_ROOT/alt-list.txt"
+: > "$ALT_LIST_FILE"
+
+for PART_DIR in "${MATCHING_DIRS[@]}"; do
+    DIR_NAME=$(basename "$PART_DIR")
+    PART_NAME=${DIR_NAME#*_}
+
+    echo "\e[32mProcessing: $DIR_NAME ($PART_NAME)\e[0m"
+
+    # --- 1. 元画像のリネーム処理 ---
+    ALL_FILES=( "$PART_DIR"/*.(#i)(jpg|jpeg|png)(N) )
+
+    TARGET_FILES=()
+    TARGET_PATTERN="${BRAND_NAME}-${PRODUCT_NAME}-${PART_NAME}-"
+
+    for file in "${ALL_FILES[@]}"; do
+        filename=$(basename "$file")
+        if [[ ! "$filename" == "$TARGET_PATTERN"[0-9][0-9].* ]]; then
+            TARGET_FILES+=("$file")
+        fi
+    done
+    TOTAL_FILES=${#TARGET_FILES[@]}
+
+    if [ "$TOTAL_FILES" -gt 0 ]; then
+        idx=1
+        for existing in "$PART_DIR"/"$TARGET_PATTERN"[0-9][0-9].*(N); do
+            base=$(basename "${existing%.*}")
+            num=${base##*-}
+            num=$((10#$num))
+            if [ $num -ge $idx ]; then idx=$((num + 1)); fi
+        done
+
+        current=0
+        for FILE in "${TARGET_FILES[@]}"; do
+            current=$((current + 1))
+            EXT="${FILE##*.}"
+            NEW_NAME=$(printf "%s%02d.%s" "$TARGET_PATTERN" "$idx" "$EXT")
+            mv -n "$FILE" "$PART_DIR/$NEW_NAME"
+            idx=$((idx + 1))
+            show_progress "Renaming" "$current" "$TOTAL_FILES"
+        done
+        echo ""
+    else
+        echo "  No new files to rename."
+    fi
+
+    # --- 2. WebP変換処理 ---
+    CONVERT_FILES=( "$PART_DIR"/*.(#i)(jpg|jpeg|png)(N) )
+    CONVERT_TOTAL=${#CONVERT_FILES[@]}
+
+    if [ "$CONVERT_TOTAL" -gt 0 ]; then
+        # 変換先ディレクトリ名に _webp サフィックスを付与して区別しやすくする
+        WEBP_DIR_NAME="${DIR_NAME}_webp"
+        mkdir -p "$SAVE_ROOT/$WEBP_DIR_NAME"
+
+        # Altテキスト用の文字列整形
+        DISP_BRAND=${(C)BRAND_NAME//-/ }
+        DISP_PRODUCT=${(C)PRODUCT_NAME//-/ }
+        DISP_PART=${PART_NAME//-/ }
+        DISP_PRODUCT=$(echo "$DISP_PRODUCT" | perl -pe 's/\b([A-Za-z]+[0-9]+[A-Za-z0-9]*)\b/\U$1/g')
+
+        echo "■ $DIR_NAME" >> "$ALT_LIST_FILE"
+        echo "$DISP_BRAND $DISP_PRODUCT の $DISP_PART" >> "$ALT_LIST_FILE"
+        echo "" >> "$ALT_LIST_FILE"
+
+        current=0
+        skipped=0
+        for FILE in "${CONVERT_FILES[@]}"; do
+            current=$((current + 1))
+            FILENAME=$(basename "${FILE%.*}")
+            OUT_FILE="$SAVE_ROOT/$WEBP_DIR_NAME/$FILENAME.webp"
+
+            # スキップ判定: 変換先が既に存在し、元画像より新しければスキップ
+            if [[ "$FORCE" == false && -f "$OUT_FILE" && "$OUT_FILE" -nt "$FILE" ]]; then
+                skipped=$((skipped + 1))
+                show_progress "Converting" "$current" "$CONVERT_TOTAL"
+                continue
+            fi
+
+            if [ -n "$WIDTH" ]; then
+                cwebp -quiet -q "$QUALITY" -m 6 -resize "$WIDTH" 0 "$FILE" -o "$OUT_FILE"
+            else
+                cwebp -quiet -q "$QUALITY" -m 6 "$FILE" -o "$OUT_FILE"
+            fi
+
+            show_progress "Converting" "$current" "$CONVERT_TOTAL"
+        done
+        echo ""
+        if [ "$skipped" -gt 0 ]; then
+            echo "  Completed: $PART_NAME (skipped $skipped already converted)"
+        else
+            echo "  Completed: $PART_NAME"
+        fi
+    else
+        echo "  No images found to convert."
+    fi
+done
+
+echo "\n\e[32;1mAll tasks done. Ready for upload.\e[0m"
