@@ -53,6 +53,7 @@ setopt hist_verify
 # --- fzf ---
 # fzfのキーバインドと補完を有効化
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export FZF_DEFAULT_COMMAND="fd --type file --hidden --exclude .git"
 
 # --- Powerlevel10k ---
 # テーマを読み込む
