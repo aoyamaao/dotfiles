@@ -1,0 +1,13 @@
+git status --porcelain \
+  | fzf --multi \
+        --preview '
+          if [[ {1} == "??" ]]; then
+            cat -- {2}
+          else
+            git diff --color=always -- {2}
+          fi
+        ' \
+        --bind 'ctrl-u:preview-page-up' \
+        --bind 'ctrl-d:preview-page-down' \
+  | awk '{print $2}' \
+  | xargs git add --
