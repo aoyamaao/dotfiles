@@ -1,0 +1,15 @@
+local target_dir
+
+target_dir=$(
+  fd \
+    --type d \
+    --hidden \
+    --exclude .git \
+    2>/dev/null |
+    fzf \
+      --preview 'ls -la -- {}' \
+      --bind 'ctrl-u:preview-page-up' \
+      --bind 'ctrl-d:preview-page-down'
+) || return
+
+[[ -n "$target_dir" ]] && cd -- "$target_dir"
