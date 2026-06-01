@@ -1,33 +1,28 @@
 return {
   {
     'nvim-treesitter/nvim-treesitter',
-    opts = function(_, opts)
-      if type(opts.ensure_installed) == 'table' then
-        vim.list_extend(opts.ensure_installed, {
-          'markdown',
-          'markdown_inline',
-          'astro',
-          'html',
-          'css',
-          'javascript',
-          'typescript',
-          'tsx',
-          'mdx',
-        })
-      else
-        opts.ensure_installed = {
-          'markdown',
-          'markdown_inline',
-          'astro',
-          'html',
-          'css',
-          'javascript',
-          'typescript',
-          'tsx',
-          'mdx',
-        }
-      end
-    end,
+    branch = 'master',
+    build = ':TSUpdate',
+    main = 'nvim-treesitter.configs',
+    opts = {
+      ensure_installed = {
+        'markdown',
+        'markdown_inline',
+        'latex',
+        'astro',
+        'html',
+        'css',
+        'javascript',
+        'typescript',
+        'tsx',
+        'lua',
+        'vim',
+        'vimdoc',
+        'query',
+      },
+      highlight = { enable = true },
+      indent = { enable = true },
+    },
   },
   {
     'MeanderingProgrammer/render-markdown.nvim',
@@ -35,6 +30,10 @@ return {
     ft = { 'markdown', 'mdx' },
     opts = {
       file_types = { 'markdown', 'mdx' },
+      latex = {
+        enabled = true,
+        converter = { 'latex2text' },
+      },
     },
     init = function()
       vim.api.nvim_create_autocmd('FileType', {
