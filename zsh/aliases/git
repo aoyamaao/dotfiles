@@ -1,0 +1,29 @@
+# 短縮形式でbranch名と変更状態を確認する
+alias gs='git status --short --branch'
+
+# 通常形式でWorkingTreeの状態を確認する
+alias gst='git status'
+
+# editorを開いてcommit messageを書く
+alias gc='git commit'
+
+# 現在のbranchのcommit履歴をgraph付きで表示する
+alias gl='git log --oneline --graph --decorate'
+
+# すべてのbranchを含めてcommit履歴をgraph付きで表示する
+alias gla='git log --oneline --graph --decorate --all'
+
+# WorkingTreeとStagingAreaの差分を見る
+alias gdw='git diff'
+
+# StagingAreaとHEADの差分を見る
+alias gds='git diff --staged'
+
+# HEADとWorkingTreeの差分を見る (StagingAreaの変更も含む)
+alias gdh='git diff HEAD'
+
+# HEADのcommit内容を見る
+alias gsh='git show --stat --patch --oneline HEAD'
+
+# 未追跡ファイル一覧を見る (ignore対象は除く)
+alias glsu='git ls-files --others --exclude-standard'

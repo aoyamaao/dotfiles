@@ -1,0 +1,6 @@
+local src dst
+src=$(fd --type f | fzf --prompt='Source> ')
+[[ -z "$src" ]] && return
+dst=$(fd --type d | fzf --prompt='Dest> ')
+[[ -z "$dst" ]] && return
+cp "$src" "$dst"
