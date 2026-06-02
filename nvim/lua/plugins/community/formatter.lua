@@ -1,26 +1,20 @@
 return {
   'stevearc/conform.nvim',
   lazy = false,
-  config = function()
-    require('conform').setup({
-      formatters_by_ft = {
-        lua = { 'stylua' },
-        python = { 'black' },
-        cpp = { 'clang-format' },
-        javascript = { 'prettier' },
-        typescript = { 'prettier' },
-        javascriptreact = { 'prettier' },
-        typescriptreact = { 'prettier' },
-        css = { 'prettier' },
-        html = { 'prettier' },
-        json = { 'prettier' },
-        markdown = { 'prettier' },
-        astro = { 'prettier' },
-      },
-    })
-
-    vim.keymap.set({ 'n', 'v' }, '<leader>cf', function()
-      require('conform').format({ async = true, lsp_fallback = true })
-    end, { desc = '[C]ode [F]ormat' })
+  keys = {
+    {
+      '<leader>cf',
+      function()
+        require('conform').format({ async = true, lsp_fallback = true })
+      end,
+      mode = { 'n', 'v' },
+      desc = '[C]ode [F]ormat',
+    },
+  },
+  opts = {
+    formatters_by_ft = {},
+  },
+  config = function(_, opts)
+    require('conform').setup(opts)
   end,
 }
