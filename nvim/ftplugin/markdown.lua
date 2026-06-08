@@ -1,11 +1,5 @@
 -- Markdownバッファの設定
 
--- リストの自動継続
--- r: Enterで継続  o: o/Oで継続  j: 連結時に不要な記号を消す
-vim.opt_local.formatoptions:append('roj')
--- 「- 」「* 」を継続対象に(b: は記号の後に半角スペースが要る意味)
-vim.opt_local.comments = 'b:-,b:*'
-
 -- 保存時にfrontmatterのupdatedDateを更新
 local function update_frontmatter_date()
   local lines = vim.api.nvim_buf_get_lines(0, 0, 20, false)
