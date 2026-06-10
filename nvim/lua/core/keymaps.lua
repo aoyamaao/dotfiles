@@ -84,11 +84,3 @@ map('n', '<leader>bc', function()
     )
   end
 end, { desc = '現在のBuffer以外をすべて閉じる' })
-
--- ターミナルモードでウィンドウ移動
-vim.cmd([[
-  tnoremap <C-j> <C-w><C-j>
-  tnoremap <C-k> <C-w><C-k>
-  tnoremap <C-l> <C-w><C-l>
-  tnoremap <C-h> <C-w><C-h>
-]])
