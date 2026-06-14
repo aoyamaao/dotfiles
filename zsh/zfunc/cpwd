@@ -1,0 +1,3 @@
+cpwd() {
+  printf '%s' "${PWD/#$HOME/~}" | pbcopy
+}
