@@ -1,0 +1,24 @@
+cppath() {
+  local item
+  local base
+  local copied_path
+
+  base="${PWD/#$HOME/~}"
+
+  item=$(
+    {
+      printf '.\n'
+      find . -path './.git' -prune -o \( -type f -o -type d \) -print |
+        sed '/^\.$/d; s#^\./##'
+    } | fzf
+  ) || return
+
+  if [[ "$item" == "." ]]; then
+    copied_path="$base"
+  else
+    copied_path="$base/$item"
+  fi
+
+  printf '%s' "$copied_path" | pbcopy
+  printf 'copied: %s\n' "$copied_path"
+}

@@ -1,0 +1,13 @@
+cpname() {
+  local item
+  local name
+
+  item=$(
+    find . -mindepth 1 -path './.git' -prune -o \( -type f -o -type d \) -print |
+      sed 's#^\./##' |
+      fzf
+  ) || return
+
+  name="${item:t}"
+  printf '%s' "$name" | pbcopy
+}
