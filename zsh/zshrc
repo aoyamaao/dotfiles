@@ -1,9 +1,9 @@
 # ==============================================================================
 # Zsh Configuration
 # ==============================================================================
-#
+
 # ------------------------------------------------------------------------------
-# 1. Powerlevel10k Instant Prompt (Initialization)
+# Powerlevel10k Instant Prompt (Initialization)
 # ------------------------------------------------------------------------------
 # プロンプトの高速表示機能。 ユーザーの入力を求める設定はこれより上に記述する
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
@@ -11,7 +11,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 # ------------------------------------------------------------------------------
-# 2. Environment Variables & PATH
+# Environment Variables & PATH
 # ------------------------------------------------------------------------------
 # --- PATH Settings ---
 # コマンド検索パスを設定。Homebrewのパスを優先的に検索するように先頭に追加する
@@ -29,7 +29,7 @@ command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 
 # ------------------------------------------------------------------------------
-# 3. Shell Options & History
+# Shell Options & History
 # ------------------------------------------------------------------------------
 # --- History Settings ---
 HISTFILE=$HOME/.zsh_history
@@ -47,7 +47,7 @@ setopt share_history
 setopt hist_verify
 
 # ------------------------------------------------------------------------------
-# 4. Plugin & Theme Loading
+# Plugin & Theme Loading
 # ------------------------------------------------------------------------------
 # --- fzf ---
 # fzfのキーバインドと補完を有効化
@@ -72,27 +72,24 @@ source ~/powerlevel10k/powerlevel10k.zsh-theme
   && source ~/.nix-profile/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # ------------------------------------------------------------------------------
-# 5. Aliases
+# Aliases
 # ------------------------------------------------------------------------------
-# --- Image Processing ---
-# WebP一括変換: 横幅1200px / 画質75 / Effort 6 / 拡張子を小文字の.webpに統一
-alias webp-gen='find . -type f \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" \) | xargs -I {} sh -c '\''cwebp -q 75 -m 6 -resize 1200 0 "{}" -o "${1%.*}.webp"'\'' -- {}'
 source ~/dotfiles/zsh/aliases/git
 
 # ------------------------------------------------------------------------------
-# 6. Editor 
+# Editor 
 # ------------------------------------------------------------------------------
 export EDITOR=nvim
 export VISUAL=nvim
 bindkey -e
 
 # ------------------------------------------------------------------------------
-# 7. Homebrew
+# Homebrew
 # ------------------------------------------------------------------------------
 export HOMEBREW_NO_AUTO_UPDATE=1
 
 # ------------------------------------------------------------------------------
-# 8. functions
+# functions
 # ------------------------------------------------------------------------------
 fpath=(~/.zfunc $fpath)
 
