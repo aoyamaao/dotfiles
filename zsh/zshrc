@@ -17,9 +17,7 @@ fi
 # コマンド検索パスを設定。Homebrewのパスを優先的に検索するように先頭に追加する
 typeset -U path PATH
 export PATH="$(brew --prefix)/bin:$PATH"
-export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 export PATH="$HOME/dotfiles/bin:$PATH"
-export PATH="$HOME/atcoder/bin:$PATH"
 export PATH="$HOME/.rbenv/bin:$PATH"
 export PATH="$HOME/.rbenv/shims:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
