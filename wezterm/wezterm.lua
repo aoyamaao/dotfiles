@@ -17,6 +17,32 @@ config.window_frame = {
 
 config.use_fancy_tab_bar = true
 
+-- Ctrl+hjklでペイン移動するヘルパー
+local function is_passthrough(pane)
+	if pane:get_user_vars().IS_NVIM == "true" then
+		return true
+	end
+	local p = pane:get_foreground_process_name() or ""
+	p = p:match("([^/\\]+)$") or p
+	return p == "tmux"
+end
+
+local dir = { h = "Left", j = "Down", k = "Up", l = "Right" }
+
+local function ctrl_move(key)
+	return {
+		key = key,
+		mods = "CTRL",
+		action = wezterm.action_callback(function(win, pane)
+			if is_passthrough(pane) then
+				win:perform_action({ SendKey = { key = key, mods = "CTRL" } }, pane)
+			else
+				win:perform_action({ ActivatePaneDirection = dir[key] }, pane)
+			end
+		end),
+	}
+end
+
 config.keys = {
 	-- タブを閉じる
 	{ key = "w", mods = "CMD", action = act.CloseCurrentTab({ confirm = true }) },
@@ -32,10 +58,10 @@ config.keys = {
 	-- ペイン拡張
 	{ key = "z", mods = "CMD", action = act.TogglePaneZoomState },
 	-- ペイン移動
-	{ key = "h", mods = "CTRL", action = act.ActivatePaneDirection("Left") },
-	{ key = "j", mods = "CTRL", action = act.ActivatePaneDirection("Down") },
-	{ key = "k", mods = "CTRL", action = act.ActivatePaneDirection("Up") },
-	{ key = "l", mods = "CTRL", action = act.ActivatePaneDirection("Right") },
+	ctrl_move("h"),
+	ctrl_move("j"),
+	ctrl_move("k"),
+	ctrl_move("l"),
 }
 
 -- tmux連携
