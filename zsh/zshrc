@@ -51,7 +51,10 @@ setopt hist_verify
 # ------------------------------------------------------------------------------
 # --- fzf ---
 # fzfのキーバインドと補完を有効化
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -r ~/.nix-profile/share/fzf/key-bindings.zsh ] \
+  && source ~/.nix-profile/share/fzf/key-bindings.zsh
+[ -r ~/.nix-profile/share/fzf/completion.zsh ] \
+  && source ~/.nix-profile/share/fzf/completion.zsh
 export FZF_DEFAULT_COMMAND="fd --type file --hidden --exclude .git"
 
 # --- Powerlevel10k ---
@@ -62,9 +65,11 @@ source ~/powerlevel10k/powerlevel10k.zsh-theme
 
 # --- Zsh Plugins ---
 # zsh-autosuggestions (コマンド履歴からの入力補完)
-source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+[ -r ~/.nix-profile/share/zsh-autosuggestions/zsh-autosuggestions.zsh ] \
+  && source ~/.nix-profile/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 # zsh-syntax-highlighting (コマンドラインのリアルタイム構文ハイライト)
-source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+[ -r ~/.nix-profile/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] \
+  && source ~/.nix-profile/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # ------------------------------------------------------------------------------
 # 5. Aliases
