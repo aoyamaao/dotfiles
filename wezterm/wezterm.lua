@@ -62,6 +62,19 @@ config.keys = {
 	ctrl_move("j"),
 	ctrl_move("k"),
 	ctrl_move("l"),
+	-- コピーモード起動
+	{ key = "Enter", mods = "CMD", action = act.ActivateCopyMode },
+}
+
+-- コピーモードでCtrl+[をEsc相当にする
+local copy_mode = wezterm.gui.default_key_tables().copy_mode
+table.insert(copy_mode, {
+	key = "[",
+	mods = "CTRL",
+	action = act.CopyMode("Close"),
+})
+config.key_tables = {
+	copy_mode = copy_mode,
 }
 
 -- tmux連携
